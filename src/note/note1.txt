@@ -1,0 +1,82 @@
+<el-form-item class="submit-buttom-area">
+            <el-button type="primary" @click="onSubmit">Create</el-button>
+          </el-form-item>
+
+const AddImport = () => {
+  const product = {
+    id: importDetailForm.name.id,
+    name: importDetailForm.name.name,
+    uom: importDetailForm.uom,
+    qty: importDetailForm.qty,
+    rate: importDetailForm.rate,
+    amount: importDetailForm.amount,
+  };
+
+  // Retrieve existing products from localStorage
+  const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+
+  // Check if the product already exists
+  const existingProduct = storedProducts.find(
+    (storedProduct) => storedProduct.id === product.id
+  );
+
+  if (existingProduct) {
+    console.log('Item already exists');
+    // You can show a message to the user indicating that the item already exists
+  } else {
+    // Add the product to the stored products array
+    storedProducts.push(product);
+
+    // Save the updated products array to localStorage
+    localStorage.setItem('products', JSON.stringify(storedProducts));
+
+    console.log('Product added:', product);
+  }
+
+  // Rest of your code...
+};
+
+
+
+
+const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  importForm.date = `${year}-${month}-${day}`;
+
+
+  const storedProducts = JSON.parse(localStorage.getItem("importItem")) || [];
+const existingProductIndex = storedProducts.findIndex(
+  (storedProduct) => storedProduct.id === product.id
+);
+
+if (existingProductIndex > -1) {
+  const updatedProduct = { ...storedProducts[existingProductIndex], ...product };
+
+  // Update the product in the stored products array
+  storedProducts.splice(existingProductIndex, 1, updatedProduct);
+
+  // Save the updated products array to localStorage
+  localStorage.setItem("importItem", JSON.stringify(storedProducts));
+
+  console.log("Product updated:", updatedProduct);
+  // Update the table data with the new stored products
+  tableData.importItem = [...storedProducts];
+
+  importForm.importItem = localStorage.getItem("importItem");
+} else {
+  // Product doesn't exist, add it as a new product
+  storedProducts.push(product);
+
+  // Save the updated products array to localStorage
+  localStorage.setItem("importItem", JSON.stringify(storedProducts));
+
+  console.log("Product added:", product);
+  // Update the table data with the new stored products
+  tableData.importItem = [...storedProducts];
+
+  importForm.importItem = localStorage.getItem("importItem");
+}

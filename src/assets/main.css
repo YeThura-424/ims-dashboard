@@ -1,0 +1,167 @@
+@import "./variable.css";
+/* @import "bootstrap"; */
+@import "datatables.net-bs5";
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+}
+
+/* nav-bar */
+
+.el-menu--horizontal.el-menu {
+  border-bottom: none !important;
+  background: transparent;
+  box-shadow: 3px -8px 9px 3px var(--secondry-color);
+  height: 50px;
+}
+.el-menu--horizontal {
+  align-items: center;
+}
+.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover {
+  background: transparent !important;
+}
+.el-menu--horizontal > .el-menu-item.is-active,
+.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  border: none !important;
+}
+.el-dropdown.user-avatar {
+  margin-right: 10px;
+}
+/* .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  border-bottom: 2px solid var(--secondry-color) !important;
+  color: var(--secondry-color) !important;
+} */
+
+/* li.el-menu-item.is-active {
+  border-bottom: 2px solid var(--secondry-color) !important;
+  color: var(--secondry-color) !important;
+} */
+
+/* main-container */
+.main-container {
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.el-page-header {
+  background: var(--contant-bg);
+  padding: 15px;
+}
+
+/* .el-card.is-always-shadow.box-card.dashboard-card {
+  width: 50vw;
+} */
+
+button.el-button.el-button--primary {
+  background-color: var(--primary-color);
+  border: none;
+}
+
+.el-card.is-always-shadow.box-card.dashboard-card {
+  background: var(--card-bg);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table {
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+.flex.justify-content-end {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.el-input.el-input--prefix.table-search-input {
+  width: 50vw;
+}
+a.header-link {
+  text-decoration: none;
+}
+.picture-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+img.login-bg {
+  width: 30vw;
+  object-fit: contain;
+}
+.el-card.is-never-shadow.box-card.login-card {
+  background-color: transparent;
+  /* border: none; */
+}
+.login-main {
+  padding: 50px;
+}
+h2.login-welcome {
+  margin: 0;
+  text-align: center;
+  padding-bottom: 30px;
+}
+.login-area {
+  width: 40vw;
+}
+.el-select {
+  width: 100vw;
+}
+img.avatar.upload-img-preview {
+  width: 143px;
+  height: 150px;
+  object-fit: contain;
+}
+.img-preview {
+  margin-top: 10px;
+  width: 160px;
+  height: 170px;
+  border: 1px solid #dcdfe6;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.el-row {
+  justify-content: space-between;
+}
+p.required-field {
+  color: red;
+  margin: 0;
+}
+button.el-button.el-button--primary.is-round.detail-button {
+  margin: 15px 0;
+}
+header.el-dialog__header {
+  background: var(--contant-bg);
+  margin-right: 0;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  color: black !important;
+}
+button.el-button.el-button--primary.import-button {
+  float: right;
+  margin: 15px 0;
+}
+.el-date-editor {
+  width: 100% !important;
+}
+.minimum_product,
+.today_sale {
+  height: 400px;
+}
+button.el-button.el-button--primary.is-round.conversion_buttom {
+  margin-bottom: 15px;
+}
+.source_product {
+  border-bottom: 1px solid #606266;
+}
+button.el-button.el-button--primary.is-round.destination_conversion_buttom {
+  margin: 15px 0px;
+}

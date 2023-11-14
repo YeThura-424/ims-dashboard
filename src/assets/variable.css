@@ -1,0 +1,8 @@
+:root {
+  --bg-color: #f0f8ff;
+  --primary-color: #4b0082;
+  --secondry-color: #008b8b;
+  --contant-bg: #deb887;
+  --card-bg: #87deb8;
+  --el-color-primary: var(--secondry-color);
+}

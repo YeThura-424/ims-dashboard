@@ -1,0 +1,436 @@
+<template>
+  <div>
+    <el-page-header @back="onBack">
+      <template #content>
+        <div class="flex items-center">
+          <span class="text-large font-600 mr-3"> Update Existing Sale</span>
+        </div>
+      </template>
+    </el-page-header>
+    <div class="contact_area">
+      <el-card>
+        <!-- import form start  -->
+        <el-form :model="saleForm" label-width="120px" label-position="left">
+          <el-form-item label="Sale Order No.">
+            <el-input v-model="saleForm.orderno" disabled />
+          </el-form-item>
+          <el-row>
+            <el-col :span="11">
+              <el-form-item label="Invoice Date">
+                <el-input
+                  v-model="saleForm.saledate"
+                  type="text"
+                  class="w-50"
+                  autocomplete="on"
+                  disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="Sale Person">
+                <el-input v-model="saleForm.saleperson" disabled />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11">
+              <el-form-item label="Total Amount">
+                <el-input v-model="saleForm.totalamount" disabled />
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="Remark">
+                <el-input v-model="saleForm.remark" type="textarea" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <!-- import form end  -->
+      </el-card>
+      <el-button
+        type="success"
+        round
+        :icon="Plus"
+        class="add_import_detail"
+        @click="showImportDetailDialog"
+        >Add Sale Detail</el-button
+      >
+      <!-- Import detail dialog start -->
+      <el-dialog
+        v-model="importDetailDialog"
+        width="70%"
+        align-center
+        :show-close="false"
+      >
+        <template #header>
+          <h4>Sale Detail</h4>
+        </template>
+
+        <el-form
+          v-model="saleDetailForm"
+          label-width="120px"
+          label-position="top"
+        >
+          <el-row>
+            <el-col :span="7">
+              <el-form-item label="Product Name">
+                <el-select
+                  v-model="saleDetailForm.name"
+                  placeholder="Please Select Product Name"
+                  value-key="id"
+                  filterable
+                  clearable
+                >
+                  <el-option
+                    v-for="product in products"
+                    :label="product.product_name"
+                    :key="product.product_id"
+                    :value="{
+                      name: product.product_name,
+                      id: product.product_id,
+                    }"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item label="Qty">
+                <el-input v-model="saleDetailForm.qty" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item label="Available Qty">
+                <el-input v-model="saleDetailForm.closingqty" disabled />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11">
+              <el-form-item label="Rate">
+                <el-input v-model="saleDetailForm.rate" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="Product Amount">
+                <el-input v-model="saleDetailForm.productamount" disabled />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="hideImportDetailDialog">Cancel</el-button>
+            <el-button type="primary" @click="AddSaleDetail"> Add </el-button>
+          </span>
+        </template>
+      </el-dialog>
+      <!-- Import detail dialog end  -->
+      <!-- Product detail table start  -->
+      <el-card>
+        <el-table :data="tableData.saleItem" :table-layout="tableLayout">
+          <el-table-column prop="name" label="Product Name" />
+          <el-table-column prop="qty" label=" Quantity" />
+          <el-table-column prop="rate" label="Rate" />
+          <el-table-column prop="productamount" label="Product Amount" />
+          <el-table-column label="Operations">
+            <template #default="scope">
+              <el-button
+                size="small"
+                @click="handleEdit(scope.$index, scope.row)"
+                >Edit</el-button
+              >
+              <el-button
+                size="small"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                >Delete</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+      <!-- Product detail table end  -->
+    </div>
+    <div class="action_button">
+      <el-button type="primary" fill @click="onBack">Cancle</el-button>
+      <el-button type="success" fill @click="editSale">Save</el-button>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { Plus } from "@element-plus/icons-vue";
+import router from "@/router";
+import { reactive } from "vue";
+import FileUpload from "../../components/FileUpload.vue";
+// import UploadFile from "element-plus";
+import { ref, computed, watch, onMounted } from "vue";
+import store from "@/store";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const importDetailDialog = ref();
+const tableData = reactive({
+  saleItem: [],
+});
+const onBack = () => {
+  router.back();
+  localStorage.removeItem("saleItem");
+};
+
+const showImportDetailDialog = () => {
+  importDetailDialog.value = true;
+};
+
+const hideImportDetailDialog = () => {
+  importDetailDialog.value = false;
+  clearImportDetailForm();
+};
+const clearImportDetailForm = () => {
+  saleDetailForm.name = "";
+  saleDetailForm.qty = "";
+  saleDetailForm.rate = "";
+  saleDetailForm.productamount = "";
+};
+const user = computed(() => store.state.user.data);
+const products = computed(
+  () => store.state.importProduct.data.saleable_product
+);
+
+store.dispatch("getSaleInvoice", route.params.id).then(() => {
+  tableData.saleItem = store.state.currentSaleInvoice.data.product;
+  localStorage.setItem("saleItem", JSON.stringify(tableData.saleItem));
+});
+store.dispatch("getImportProduct");
+store.dispatch("getUser");
+const saleDetailForm = reactive({
+  name: {},
+  qty: "",
+  closingqty: "",
+  previous_qty: "",
+  rate: "",
+  productamount: "",
+});
+const saleForm = reactive({
+  orderno: "",
+  saledate: "",
+  saleperson: "",
+  totalamount: "",
+  remark: "",
+  saleItem: "",
+  id: "",
+  _method: "put",
+});
+
+// Watch for changes in the qty and rate fields
+watch(
+  [
+    () => saleDetailForm.qty,
+    () => saleDetailForm.rate,
+    () => saleDetailForm.name,
+    () => store.state.currentSaleInvoice.data,
+    user,
+  ],
+  ([newQty, newRate, newProductName, newVal, user]) => {
+    // Check if both qty and rate have values
+    if (newQty !== "" && newRate !== "") {
+      saleDetailForm.productamount = newQty * newRate; // Calculate the new amount
+    }
+
+    // Find the selected product based on the newProductName
+    const selectedProduct = products.value.find(
+      (product) => product.product_name === newProductName.name
+    );
+    // console.log(newProductName);
+    console.log(selectedProduct);
+    if (selectedProduct) {
+      // Update the closing quantity based on the selected product's quantity
+      saleDetailForm.closingqty = selectedProduct.product_qty;
+      console.log(saleDetailForm);
+    } else {
+      // Reset the closing quantity if the selected product is not found
+      saleDetailForm.closingqty = "";
+      console.log(saleDetailForm);
+    }
+
+    console.log(newVal);
+    //get login user
+    saleForm.saleperson = user.username;
+
+    saleForm.orderno = newVal.data.sale_code;
+    saleForm.saledate = newVal.data.sale_date;
+    saleForm.totalamount = newVal.data.sale_total_amount;
+    saleForm.remark = newVal.data.sale_remark;
+    saleForm.id = newVal.data.sale_id;
+  }
+);
+onMounted(() => {
+  // Optional: Set initial amount if qty and rate already have values
+  if (saleDetailForm.qty !== "" && saleDetailForm.rate !== "") {
+    saleDetailForm.productamount = saleDetailForm.qty * saleDetailForm.rate;
+  }
+
+  const storedProduct = localStorage.getItem("saleItem");
+  if (storedProduct) {
+    tableData.saleItem = JSON.parse(storedProduct);
+  }
+
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  saleForm.date = `${year}-${month}-${day}`;
+
+  console.log(tableData.saleItem);
+});
+
+const AddSaleDetail = () => {
+  console.log(saleDetailForm);
+  const product = {
+    id: saleDetailForm.name.id,
+    name: saleDetailForm.name.name,
+    qty: saleDetailForm.qty,
+    previous_qty: saleDetailForm.previous_qty,
+    rate: saleDetailForm.rate,
+    productamount: saleDetailForm.productamount,
+  };
+
+  const storedProducts = JSON.parse(localStorage.getItem("saleItem")) || [];
+  // const existingProduct = storedProducts.find(
+  //   (storedProduct) => storedProduct.id === product.id
+  // );
+
+  const existingProductIndex = storedProducts.findIndex(
+    (storedProduct) => storedProduct.id === product.id
+  );
+
+  if (existingProductIndex > -1) {
+    const updatedProduct = {
+      ...storedProducts[existingProductIndex],
+      ...product,
+    };
+
+    // Update the product in the stored products array
+    storedProducts.splice(existingProductIndex, 1, updatedProduct);
+
+    // Save the updated products array to localStorage
+    localStorage.setItem("saleItem", JSON.stringify(storedProducts));
+
+    console.log("Product updated:", updatedProduct);
+    // Update the table data with the new stored products
+    tableData.saleItem = [...storedProducts];
+
+    saleForm.saleItem = localStorage.getItem("saleItem");
+    // console.log("Item already exists");
+    // alert("You already Added the Product!");
+    // You can show a message to the user indicating that the item already exists
+    const total = storedProducts.reduce((acc, item) => {
+      return acc + parseFloat(item.productamount);
+    }, 0);
+    saleForm.totalamount = total.toFixed(2);
+    console.log(total);
+    console.log(saleForm);
+  } else {
+    // Add the product to the stored products array
+    storedProducts.push(product);
+
+    // Save the updated products array to localStorage
+    localStorage.setItem("saleItem", JSON.stringify(storedProducts));
+
+    console.log("Product added:", product);
+    // Update the table data with the new stored products
+    tableData.saleItem = [...storedProducts];
+
+    saleForm.saleItem = localStorage.getItem("saleItem");
+  }
+
+  hideImportDetailDialog();
+};
+
+const editSale = () => {
+  console.log(saleForm);
+  // console.log(typeof importForm.importItem);
+  store
+    .dispatch("saveWarehouseImport", saleForm)
+    .then(({ data }) => {
+      if (data.status == 200) {
+        console.log(data);
+        store.commit("notify", data.message);
+        store.dispatch("getWarehouseImports");
+        localStorage.removeItem("importItem");
+        router.push({
+          name: "ImportToWarehouse",
+        });
+      } else {
+        console.log(saleForm);
+        console.log(data.status);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const handleEdit = (index: number, row: User) => {
+  console.log(index, row);
+  showImportDetailDialog();
+  // Check if a product is already selected for editing
+  if (saleDetailForm.name) {
+    const selectedProduct = products.value.find(
+      (product) => product.product_name === saleDetailForm.name.name
+    );
+    if (selectedProduct) {
+      // Set the available quantity from the selected product's data
+      saleDetailForm.closingqty = selectedProduct.product_qty;
+    } else {
+      // If the selected product is not found, reset the closing quantity
+      saleDetailForm.closingqty = "";
+    }
+  }
+  saleDetailForm.name = {
+    name: row.name,
+    id: row.id,
+  };
+  saleDetailForm.qty = row.qty;
+  saleDetailForm.previous_qty = row.qty;
+  saleDetailForm.rate = row.rate;
+  saleDetailForm.productamount = row.productamount;
+  console.log(saleDetailForm);
+};
+const handleDelete = (index: number, row: User) => {
+  const storedProducts = JSON.parse(localStorage.getItem("saleItem")) || [];
+
+  storedProducts.splice(index, 1);
+
+  localStorage.setItem("saleItem", JSON.stringify(storedProducts));
+
+  tableData.saleItem = [...storedProducts];
+  saleForm.importItem = localStorage.getItem("saleItem");
+};
+</script>
+my saleform.totalamount is not updating when i update products qty and rate
+
+
+
+
+watch(
+  () => pricingForm.productname,
+  (newProduct) => {
+    const selectedProduct = pricingStore.pricing.value.find(
+      (product) => product.product_sku === newProduct.name
+    );
+
+    console.log(selectedProduct);
+  }
+);
+
+
+const handleDelete = (index) => {
+  const removedProduct = tableData.importItem[index];
+  if (removedProduct && removedProduct.id) {
+    productsToRemove.value.push(removedProduct.id); // Add the product ID to the productsToRemove array
+  }
+
+  tableData.importItem.splice(index, 1); // Remove the product from the table
+};
