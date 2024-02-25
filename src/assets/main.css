@@ -149,6 +149,12 @@ button.el-button.el-button--primary.import-button {
   float: right;
   margin: 15px 0;
 }
+button.el-button.el-button--info.import-button.print-button {
+  float: right;
+  margin: 15px 15px;
+  background-color: var(--info-color);
+  border-color: var(--info-color);
+}
 .el-date-editor {
   width: 100% !important;
 }
@@ -164,4 +170,54 @@ button.el-button.el-button--primary.is-round.conversion_buttom {
 }
 button.el-button.el-button--primary.is-round.destination_conversion_buttom {
   margin: 15px 0px;
+}
+.receipt {
+  box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  margin: 0 auto;
+  width: fit-content;
+  background: #fff;
+}
+.receipt-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid var(--silver-color);
+}
+.receipt-header p,
+.receipt-header h1 {
+  margin: 0;
+}
+
+.receipt p {
+  font-size: 0.7em;
+  color: #666;
+  line-height: 1.2em;
+}
+.receipt-mid {
+  display: flex;
+  justify-content: start;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabletitle {
+  font-size: 0.5em;
+  background: #eee;
+}
+.service {
+  border-bottom: 1px solid #eee;
+}
+.item {
+  width: 24mm;
+}
+.itemtext {
+  font-size: 0.5em;
+}
+#receipt {
+  display: none;
 }

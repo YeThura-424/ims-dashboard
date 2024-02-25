@@ -33,6 +33,9 @@
       <router-link to="/saleinvoice" class="header-link">
         <el-menu-item index="4-1">Sales Invoice</el-menu-item>
       </router-link>
+      <router-link to="/sales" class="header-link">
+        <el-menu-item index="4-2">Sales</el-menu-item>
+      </router-link>
     </el-sub-menu>
     <el-sub-menu index="5">
       <template #title>Report</template>

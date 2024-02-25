@@ -139,69 +139,12 @@
         </el-table>
         <!-- sale detail table end -->
       </el-card>
-      <el-row justify="end">
-        <el-button
-          type="info"
-          @click="printSale"
-          class="import-button print-button"
-          :disabled="tableData.saleItem.length == 0"
-          >Print</el-button
-        >
-        <el-button type="primary" @click="onSubmit" class="import-button"
-          >Create</el-button
-        >
-      </el-row>
+      <el-button type="primary" @click="onSubmit" class="import-button"
+        >Create</el-button
+      >
     </div>
-  </div>
-  <div class="receipt" id="receipt">
-    <div class="receipt-header">
-      <div class="logo">
-        <h1>YTR</h1>
-      </div>
-      <div class="name">
-        <p>GR Collection</p>
-      </div>
-    </div>
-    <div class="receipt-mid">
-      <div class="info">
-        <h2>Contact Info</h2>
-        <p>Address : street city, state 0000</p>
-        <p>Email : JohnDoe@gmail.com</p>
-        <p>Phone : 555-555-5555</p>
-      </div>
-    </div>
-    <div class="receipt-body">
-      <div id="table">
-        <table>
-          <tr class="service" v-for="item in tableData.saleItem">
-            <tr class="tabletitle">
-								<td class="item"><h2>Rate</h2></td>
-								<td class="item"><h2>Item</h2></td>
-								<td class="Hours"><h2>Qty</h2></td>
-								<td class="Rate"><h2>Sub Total</h2></td>
-							</tr>
-            <td class="tableitem">
-              <p class="itemtext">{{ item.saleqty }}</p>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext">{{ item.name }}</p>
-            </td>
-            <td class="tableitem"><p class="itemtext">{{ item.rate }}</p></td>
-            <td class="tableitem"><p class="itemtext">{{item.productamount}}</p></td>
-          </tr>
-
-          <tr class="tabletitle">
-            <td class="Rate" colspan="3"><h2>Total</h2></td>
-            <td class="payment"><h2>{{ saleForm.totalamount }} MMK</h2></td>
-          </tr>
-        </table>
-      </div>
-      <!--End Table-->
-    </div>
-    <div class="receipt-footer"></div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ArrowLeft, CirclePlus, Delete, Edit } from "@element-plus/icons-vue";
 import { ref, reactive, watch, onMounted } from "vue";
@@ -370,34 +313,7 @@ const handleDelete = (index: number, row: User) => {
 const totalamountErr = ref("");
 
 const loading = ref(false);
-const printSale = () => {
-  let contents = document.getElementById("receipt").innerHTML;
-  let frame1 = document.createElement("iframe");
-  frame1.name = "frame1";
-  frame1.style.position = "absolute";
-  frame1.style.top = "-1000000px";
-  document.body.appendChild(frame1);
-  let frameDoc = frame1.contentWindow
-    ? frame1.contentWindow
-    : frame1.contentDocument.document
-    ? frame1.contentDocument.document
-    : frame1.contentDocument;
-  frameDoc.document.open();
-  frameDoc.document.write('<html lang="en"><head><title>GR Collection</title>');
-  frameDoc.document.write(
-    '<link rel="stylesheet" type="text/css" href=""/>'
-  );
-  frameDoc.document.write("</head><body>");
-  frameDoc.document.write(contents);
-  frameDoc.document.write("</body></html>");
-  frameDoc.document.close();
-  setTimeout(function () {
-    window.frames["frame1"].focus();
-    window.frames["frame1"].print();
-    document.body.removeChild(frame1);
-  }, 500);
-  return false;
-};
+
 const onSubmit = async () => {
   loading.value = true;
   totalamountErr.value = "";
@@ -435,3 +351,4 @@ const onSubmit = async () => {
   console.log(saleForm);
 };
 </script>
+<style></style>

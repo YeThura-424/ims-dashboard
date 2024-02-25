@@ -12,6 +12,7 @@ import VendorEdit from "../views/vendor/VendorEdit.vue";
 import MRNList from "../views/purchase/MRNList.vue";
 import MRNAdd from "../views/purchase/MRNAdd.vue";
 import MRNEdit from "../views/purchase/MRNEdit.vue";
+import SalePrint from "../views/sale/SalePrint.vue";
 import SaleList from "../views/sale/SaleList.vue";
 import SaleAdd from "../views/sale/SaleAdd.vue";
 import SaleEdit from "../views/sale/SaleEdit.vue";
@@ -60,6 +61,7 @@ const router = createRouter({
           name: "MRNEdit",
           component: MRNEdit,
         },
+        { path: "/sales", name: "SalePrint", component: SalePrint },
         { path: "/saleinvoice", name: "SaleList", component: SaleList },
         { path: "/saleinvoice/add", name: "SaleAdd", component: SaleAdd },
         {
