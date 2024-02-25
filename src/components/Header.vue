@@ -64,9 +64,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import router from "@/router";
-import { useUserStore } from "@/store/user";
+import router from "../router";
+import { useUserStore } from "../store/user";
 
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);

@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { useUserStore } from "../../store/user";
-import router from "@/router";
+import router from "../../router";
 const labelPosition = ref("top");
 
 const loading = ref(false);

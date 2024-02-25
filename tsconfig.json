@@ -6,12 +6,11 @@
     },
     {
       "path": "./tsconfig.app.json"
-    },
-    {
-      "compilerOptions": {
-        // ...
-        "types": ["element-plus/global"]
-      }
     }
-  ]
+  ],
+  "compilerOptions": {
+    // ...
+    "types": ["element-plus/global"]
+  },
+  "include": ["src/**/*.js", "src/**/*.vue"]
 }
